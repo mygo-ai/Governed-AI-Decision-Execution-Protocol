@@ -1,6 +1,14 @@
 # myGO Governed AI Decision & Execution Protocol
 
+![Deployment](https://img.shields.io/badge/deployment-private%20%2F%20self--hosted-2f6fdd)
+![Runtime](https://img.shields.io/badge/runtime-PHP%208.4-777bb4)
+![Framework](https://img.shields.io/badge/framework-Symfony%207.4-000000)
+![Database](https://img.shields.io/badge/database-MariaDB%20%2F%20InnoDB-003545)
+![License](https://img.shields.io/badge/license-proprietary%20documentation-555555)
+
 **A protocol and PHP-native platform in advanced private development for turning complex objectives into authorized actions, independently verified results and measurable outcomes.**
+
+**Turning probabilistic AI reasoning into governed, durable, auditable and verifiable execution.**
 
 **Models reason. Software controls state and authority.**
 
@@ -19,6 +27,19 @@ This repository publishes the protocol, architecture, interface examples and del
 An AI-generated plan does not establish permission to act. A completed tool call does not prove that the requested result is correct. A worker timeout does not reveal whether an external change happened.
 
 The protocol defines how these questions are resolved through explicit contracts, software-controlled authority, durable records and evidence. Its purpose is to make consequential AI work reviewable, bounded and recoverable.
+
+## Why this is not a prompt wrapper
+
+The protocol does not treat a model response, agent message or successful tool call as authoritative system state.
+
+- **Authority is deterministic:** models can propose decisions and actions, but software policy, approval state and bound grants determine whether execution is permitted.
+- **Workflow state is durable:** authoritative run, task, approval, budget and execution state is persisted transactionally rather than inferred from conversation history.
+- **Execution is isolated:** protected credentials and mutation capability belong to a separately controlled broker, not directly to the reasoning model.
+- **External effects are recoverable:** logical action identities, receipts and reconciliation distinguish a failed request from an operation whose effect is unknown.
+- **Verification is independent:** an executor cannot declare its own result correct; acceptance depends on attributable evidence checked against frozen criteria.
+- **Improvement is governed:** learning produces candidates that must pass evaluation and promotion gates before stable behavior changes.
+
+The AI layer supplies probabilistic reasoning. The control plane supplies identity, authority, state transitions, evidence rules and recovery semantics. This separation is the core architectural boundary of the platform.
 
 ## Four intelligent roles, one software authority
 
