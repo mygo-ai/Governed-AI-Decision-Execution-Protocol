@@ -1,0 +1,19 @@
+{
+  "name": "myGO Governed AI Decision & Execution Protocol",
+  "repository": "ai-decision-execution-protocol",
+  "version": "1.0.0-public-docs",
+  "status": "architecture-specification",
+  "license": "proprietary-public-documentation",
+  "open_source": false,
+  "core_principle": "Models reason. Software controls state and authority.",
+  "deployment_architectures": [
+    "php-native-private",
+    "php-plus-specialized-workers",
+    "python-reference",
+    "dedicated-server",
+    "private-cloud",
+    "on-premises",
+    "hybrid"
+  ],
+  "public_repository_contains_source_runtime": false
+}
