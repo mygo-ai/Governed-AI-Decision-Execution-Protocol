@@ -1,132 +1,140 @@
 # myGO Governed AI Decision & Execution Protocol
 
-> **Probabilistic AI reasoning-ის გარდაქმნა governed, durable, auditable და verifiable execution-ად.**
+**კერძო იმპლემენტაციის დასკვნით ეტაპზე მყოფი პროტოკოლი და PHP-ზე დაფუძნებული პლატფორმა, რომელიც რთულ მიზანს გარდაქმნის ნებადართულ მოქმედებად, დამოუკიდებლად შემოწმებულ შედეგად და გაზომვად რეალურ გამოსავლად.**
 
-**Models reason. Software controls state and authority.**
+**AI მსჯელობს. პროგრამული სისტემა მართავს მდგომარეობასა და უფლებამოსილებას.**
 
-## რას წარმოადგენს პროექტი
+[English](README.md) | [არქიტექტურა](docs/ARCHITECTURE.md) | [იმპლემენტაციის სტატუსი](IMPLEMENTATION-STATUS.md) | [განვითარების გეგმა](ROADMAP.md)
 
-**myGO Governed AI Decision & Execution Protocol** არის production-oriented არქიტექტურული protocol, რომელიც AI reasoning-ს აშორებს პირდაპირ execution authority-ს.
+## რას ვაშენებთ
 
-მისი ძირითადი იდეაა:
+myGO ქმნის გადაწყვეტილებისა და შესრულების მართვად პლატფორმას ბიზნესკვლევის, პროგრამული ინჟინერიისა და ინფრასტრუქტურული ოპერაციებისთვის. პროექტი ერთ პროცესში აერთიანებს AI-ის მსჯელობას, პროგრამულად განსაზღვრულ ავტორიზაციას, სამუშაოს მდგომარეობის საიმედო შენახვასა და შედეგის დამოუკიდებელ შემოწმებას.
 
-- AI აანალიზებს, მსჯელობს, ქმნის ალტერნატივებს და გეგმებს;
-- deterministic software მართავს state-ს, permissions-ს, policy-ს, authorization-სა და execution gate-ებს;
-- execution ქმნის verifiable evidence-ს;
-- Critic / Verifier დამოუკიდებლად ამოწმებს შედეგს;
-- real-world outcome ცალკე განიხილება execution success-ისა და verification success-ისგან;
-- self-improvement გადის evaluation, regression, approval და promotion პროცესს.
+ტექნოლოგიური მიმართულება განსაზღვრულია: **PHP 8.4, Symfony 7.4 LTS, MariaDB/InnoDB, ზედამხედველობით გაშვებული PHP CLI workers და ცალკე იზოლირებული execution broker.** კერძო იმპლემენტაცია თითქმის დასრულებულია; პროექტის ხელმძღვანელის დადასტურებით, კომპონენტები ცალკეულადაა შემოწმებული. ინტეგრაციის ეტაპი ერთ სრულ sandbox ციკლში აერთიანებს რეალურ მოქმედებას, worker-ის შეწყვეტის შემდეგ აღდგენასა და არტეფაქტის დამოუკიდებელ შემოწმებას.
 
-ეს repository არის **public architecture / protocol showcase** და არა private runtime-ის open-source distribution.
+ეს რეპოზიტორი აქვეყნებს პროტოკოლს, არქიტექტურას, ინტერფეისების მაგალითებსა და განვითარების ეტაპებს. აპლიკაციის განვითარება და შემოწმება კერძო სამუშაო გარემოში მიმდინარეობს. საჯარო დოკუმენტაციის **1.1.0** ვერსია ამ განახლებას აღნიშნავს და არა production runtime-ის გამოშვებას. პროექტის მიმდინარე მდგომარეობა აღწერილია [სტატუსის დოკუმენტში](IMPLEMENTATION-STATUS.md).
 
-## რატომ არ არის ეს prompt wrapper
+## რა პრობლემას ვაგვარებთ
 
-ჩვეულებრივი prompt wrapper:
+AI-ის მიერ შექმნილი გეგმა მოქმედების უფლებას თავისთავად არ იძლევა. დასრულებული tool call შედეგის სისწორეს არ ამტკიცებს. Worker-ის timeout კი არ გვიჩვენებს, მოასწრო თუ არა გარე სისტემამ ცვლილების შესრულება.
 
-```text
-User -> Prompt -> LLM -> Response
+პროტოკოლი განსაზღვრავს, როგორ უნდა გადაწყდეს ეს საკითხები კონტრაქტებით, პროგრამული ავტორიზაციით, შენახული მდგომარეობითა და მტკიცებულებებით. მიზანია, მნიშვნელოვანი AI სამუშაო იყოს შემოწმებადი, შეზღუდული და აღდგენადი.
+
+## ოთხი ინტელექტუალური როლი და პროგრამული მართვის ფენა
+
+| კომპონენტი | პასუხისმგებლობა | უფლებამოსილების საზღვარი |
+|---|---|---|
+| **Prompt Brain** | მიზნის გააზრება, ალტერნატივების შედარება და განსაზღვრული გეგმის შეთავაზება | გეგმას სთავაზობს; საკუთარ თავს უფლებებს ვერ ანიჭებს |
+| **Execution Agent** | დამტკიცებული გეგმის კონკრეტულ ActionRequest-ებად გარდაქმნა | მოქმედებას ითხოვს; broker-ს გვერდს ვერ უვლის |
+| **Critic / Verifier** | არტეფაქტებისა და მტკიცებულებების შემოწმება წინასწარ დაფიქსირებული კრიტერიუმებით | მტკიცებულების ნაკლებობას PASS-ად ვერ აქცევს |
+| **Learning & Improvement** | დაკვირვებული შედეგებიდან გაუმჯობესების კანდიდატების შექმნა | საკუთარ ცვლილებას stable ვერსიაში დამოუკიდებლად ვერ გადაიტანს |
+| **Deterministic Control Plane** | იდენტობა, მდგომარეობა, პოლიტიკები, approvals, ბიუჯეტი და gates | პროგრამული წესებით გასცემს უფლებას და აღრიცხავს მოქმედებას |
+
+ადრინდელ მასალებში „Astra“ შემსრულებლის როლის სახელია. ის არ ნიშნავს სავალდებულო model provider-ს ან მოქმედების დამოუკიდებელ უფლებამოსილებას.
+
+## სამიზნე არქიტექტურა
+
+```mermaid
+flowchart TD
+    U[მიზანი და შეზღუდვები] --> B[Prompt Brain]
+    B --> C[Control plane]
+    H[ადამიანის დასტური] --> C
+    A[Execution agent] -->|ActionRequest| C
+    C -->|AuthorizationGrant| X[იზოლირებული broker]
+    X --> T[დაშვებული რესურსი]
+    T --> V[დამოუკიდებელი verifier]
+    X --> E[მტკიცებულებების რეესტრი]
+    V --> E
+    E --> C
+    E --> O[რეალურ შედეგზე დაკვირვება]
+    O --> L[გაუმჯობესების კანდიდატი]
+    L --> G[შეფასება და promotion gate]
+    G --> B
 ```
 
-ამ protocol-ის სამიზნე არქიტექტურა:
+კომპონენტებს ვერსიონირებული კონტრაქტები აკავშირებს. სამუშაოს ავტორიტეტული მდგომარეობა MariaDB-ში ინახება და არ განისაზღვრება მოდელის პასუხით ან ჩატის ისტორიით.
 
-```text
-Objective
--> Decision Intelligence
--> Typed Contracts
--> Deterministic Control Plane
--> Policy / Authorization
--> Authorized Execution
--> Evidence
--> Independent Verification
--> Real-World Outcome
--> Governed Improvement
-```
+## სრული ციკლის ინტეგრაცია
 
-## მთავარი პრინციპი
+ინტეგრაციის ეტაპი კომპონენტებს ერთ სრულ, შემოწმებად ციკლში აერთიანებს:
 
-```text
-Models reason.
-Software controls state and authority.
-```
+1. ავტორიზებული ოპერატორი UI-დან ან API-დან ქმნის run-ს.
+2. პროგრამა ამოწმებს დავალებას, სამიზნეს, მიღების კრიტერიუმებსა და მოქმედების მოთხოვნას.
+3. Policy ამოწმებს უფლებებს და საჭიროებისას ითხოვს ადამიანის დასტურს.
+4. Broker ამოწმებს ზუსტად ავტორიზებულ მოქმედებას და რეალურად ასრულებს sandbox adapter-ს.
+5. Workers ინარჩუნებს პროგრესს და შეწყვეტის შემდეგ ადგენს გაურკვეველი მოქმედების შედეგს.
+6. ცალკე verifier კითხულობს მიღებულ არტეფაქტს და აფიქსირებს შემოწმების შედეგს.
 
-Model-ს შეუძლია plan-ის შეთავაზება, მაგრამ model-მა თვითონ არ უნდა შეძლოს გადაწყვიტოს, გაიარა თუ არა policy gate, აქვს თუ არა production permission, ან შეიძლება თუ არა destructive action-ის შესრულება.
+| საცდელი სცენარი | აუცილებელი შედეგი |
+|---|---|
+| **Sandbox artifact writer** | რეგისტრირებულ workspace-ში ქმნის `output/report.json` ფაილს `status=ready` მნიშვნელობით; ცალკე მოწმდება მისი bytes და JSON შინაარსი |
+| **Synthetic HTTP effect target** | ზრდის counter-ს, განზრახ წყვეტს პასუხს და reconciliation-ით აღადგენს receipt-ს იმავე მოქმედების განმეორების გარეშე |
 
-## ძირითადი ფენები
+მართვის პანელი მოიცავს ავტორიზაციას, runs-ს, tasks/events-ის ისტორიას, კონკრეტული მოქმედების approval-ს, execution/verification შედეგებსა და blocked/unknown-effect შემთხვევების განხილვას. ყველა მოქმედება რეალურ backend-სა და server-side authorization-ს უნდა უკავშირდებოდეს.
 
-1. **Prompt Brain / Decision Intelligence** - problem framing, method selection, alternatives, evidence requirements, planning.
-2. **Deterministic Control Plane** - state, policies, permissions, approvals, budgets, authorization, audit.
-3. **Execution Runtime** - მხოლოდ ავტორიზებული მოქმედებების შესრულება და evidence-ის შექმნა.
-4. **Critic / Verifier** - independent verification, deterministic tests და AI-assisted review.
-5. **Outcome & Improvement** - რეალური შედეგების დაკვირვება და controlled improvement pipeline.
+დეტალები: [პირველი ეტაპი და მიღების კრიტერიუმები](docs/FIRST-MILESTONE.md).
 
-## მნიშვნელოვანი განსხვავება
+## პლატფორმის ძირითადი შესაძლებლობები
 
-```text
-Execution Success
-!= Verification Success
-!= Real-World Outcome
-```
+- **ზუსტი ავტორიზაცია:** approval უკავშირდება კონკრეტულ target-ს, operation-ს, arguments-ს, scope-სა და კონტრაქტების შესაბამის ვერსიებს. მნიშვნელოვანი ცვლილება ახალ ავტორიზაციას მოითხოვს.
+- **რეალური შესრულების საზღვარი:** დაცული credentials და ქსელური წვდომა broker-ს ეკუთვნის; model worker-მა მისი გვერდის ავლით ვერ უნდა იმოქმედოს.
+- **ტრანზაქციული მდგომარეობა:** state-ის ცვლილება, audit event და საჭირო job/outbox ჩანაწერი ერთ transaction-ში ინახება.
+- **აღდგენა:** leases, heartbeats, fencing და შეზღუდული retries პროცესების შეფერხებისას სამუშაოს მდგომარეობას იცავს.
+- **გაურკვევლობის აღრიცხვა:** `UNKNOWN_EFFECT` იწვევს reconciliation-ს; timeout თავისთავად ცვლილების გამეორების უფლებას არ იძლევა.
+- **დამოუკიდებელი შემოწმება:** შედეგი ფასდება რეალური არტეფაქტითა და verifier-ის იდენტიფიცირებადი receipt-ით.
+- **მოქმედი gates:** ახალი critical contradiction ან acceptance-ის ცვლილება შესაბამის ძველ gate-ს აუქმებს.
+- **ბიუჯეტის კონტროლი:** ლიმიტში შედის reserved, settled და uncertain ხარჯები.
+- **კონტროლირებადი გაუმჯობესება:** stable ქცევის შეცვლამდე კანდიდატი გადის შეფასებასა და promotion პროცესს.
 
-სისტემა deliberately არ აიგივებს „შესრულდა“, „სწორია“ და „რეალურ სამყაროში იმუშავა“ მდგომარეობებს.
+ამ შესაძლებლობებს ავტორიზაციისა და მტკიცებულებების საერთო მოდელი აერთიანებს. კომპონენტების შემოწმება, სრული ციკლის მიღება და production დანერგვა აღირიცხება [სტატუსის დოკუმენტში](IMPLEMENTATION-STATUS.md).
 
-## Private deployment
+## სამი განსხვავებული შედეგი
 
-myGO ამ protocol-ის საფუძველზე სთავაზობს ორგანიზაციებს private implementation და deployment მომსახურებას, მათ შორის:
+| შედეგი | კითხვა |
+|---|---|
+| Execution | შესრულდა მოქმედება, ჩავარდა თუ გაურკვეველი ეფექტი დატოვა? |
+| Verification | აკმაყოფილებს დამოუკიდებელი მტკიცებულება წინასწარ დაფიქსირებულ კრიტერიუმებს? |
+| Real-world outcome | მოგვცა ცვლილებამ სასურველი ოპერაციული ან ბიზნესშედეგი? |
 
-- Dedicated VPS / Dedicated Server;
-- Private Cloud;
-- On-Premises;
-- Single-Tenant Enterprise;
-- Self-Hosted;
-- Hybrid Model Access;
-- customer-specific security and approval policies.
+ტექნიკურად წარმატებულ deployment-ს შეიძლება არასასურველი ბიზნესშედეგი მოჰყვეს. სისტემა ამ განსხვავებას ანგარიშგებისა და გაუმჯობესების პროცესშიც ინარჩუნებს.
 
-## PHP-native private implementation
+## იმპლემენტაცია და დანერგვა
 
-PHP-native ვარიანტი ნიშნავს deterministic control architecture-ის PHP-ში რეალიზაციას და არა AI model-ის PHP-ში გადაწერას.
+არჩეული საფუძველია PHP modular monolith და ცალკე პროცესითა და უსაფრთხოების იდენტობით გაშვებული broker. PHP core-ს მუშაობისთვის Python არ დასჭირდება. ადრინდელი Python reference runtime დარჩება შესაბამისობის fixtures-ისა და შეფასების დამხმარე რესურსად.
 
-შესაძლო private architecture:
+პირველი სამიზნეა **single-tenant, private, self-hosted** ინსტალაცია. Dedicated server, private cloud და on-premises დანერგვა შესაბამისი გარემოს acceptance-ს გაივლის. სამიზნე არქიტექტურა myGO-ის SaaS control plane-ზე სავალდებულო დამოკიდებულებას არ მოითხოვს.
 
-```text
-PHP Web UI
-PHP API
-PHP Control Plane
-PHP Policy Enforcement
-MariaDB / MySQL
-Queue / Workers
-Model Gateway
-Tool Adapters
-Audit / Evidence Storage
-```
+მოდელებისა და tools-ის ინტერფეისები provider-neutral რჩება. გარე მოდელები, fallback providers, artifacts და telemetry ერთსა და იმავე მონაცემთა და რეგიონის პოლიტიკებს უნდა ემორჩილებოდეს. სპეციალიზებული workers დაემატება კონკრეტული საჭიროების დადასტურებისას.
 
-საჭიროების შემთხვევაში specialized Python / Node workers შეიძლება დაემატოს ისე, რომ provider-neutral contracts არ შეიცვალოს.
+დეტალები: [PHP იმპლემენტაცია](docs/PHP-NATIVE.md), [დანერგვა](docs/DEPLOYMENT.md).
 
-## Public repository boundary
+## გამოყენების მიმართულებები
 
-Public repository-ში შეგნებულად არ ქვეყნდება:
+საერთო control architecture-ზე განვითარდება ბიზნესსტრატეგიის, პროდუქტის დაგეგმვის, პროგრამული ინჟინერიის, ინფრასტრუქტურის, უსაფრთხოების, კვლევისა და მარკეტინგის domain profiles. თითოეული მიმართულება განსაზღვრავს საკუთარ tools-ს, evidence rules-სა და შეფასების კრიტერიუმებს; დანერგვის scope ადგენს მხარდაჭერილ integrations-ს.
 
-- proprietary prompts;
-- private evaluator datasets;
-- security-sensitive policies;
-- internal authorization logic;
-- commercial connectors;
-- deployment secrets;
-- customer-specific integrations;
-- proprietary improvement logic;
-- private production source code.
+## დოკუმენტაცია
 
-## სტატუსი
+| თემა | დოკუმენტი |
+|---|---|
+| სტატუსი და მტკიცებულებები | [Implementation status](IMPLEMENTATION-STATUS.md) |
+| განვითარების თანმიმდევრობა | [Roadmap](ROADMAP.md) |
+| კომპონენტები და საზღვრები | [Architecture](docs/ARCHITECTURE.md) |
+| პირველი სამუშაო ციკლი | [First milestone](docs/FIRST-MILESTONE.md) |
+| კონტრაქტები | [Contracts](docs/CONTRACTS.md) |
+| მართვა და უსაფრთხოება | [Governance](docs/GOVERNANCE.md), [Security](docs/SECURITY-ARCHITECTURE.md) |
+| აღდგენა და შემოწმება | [Durable execution](docs/DURABLE-EXECUTION.md), [Verification](docs/EVIDENCE-AND-VERIFICATION.md) |
+| შედეგები და გაუმჯობესება | [Outcome and improvement](docs/OUTCOME-AND-IMPROVEMENT.md) |
+| კერძო დანერგვა | [Commercial](docs/COMMERCIAL.md), [FAQ](docs/FAQ.md) |
+| ინტერფეისების მაგალითები | [Examples](examples/README.md) |
 
-**Public Status: Architecture Specification / Protocol Documentation**
+## საჯარო და კერძო მასალები
 
-README და docs აღწერს target architecture-სა და public contract-ს. ყველა აღწერილი შესაძლებლობა არ უნდა ჩაითვალოს ავტომატურად საჯაროდ ხელმისაწვდომ working implementation-ად.
+საჯაროდ წარმოდგენილია არქიტექტურა, მოთხოვნები, კონტრაქტების კონცეფციები და მიღების ეტაპები. კერძო source code, proprietary prompts, evaluator datasets, შიდა policies, commercial connectors, მომხმარებელთა მონაცემები და secrets ამ რეპოზიტორში არ ქვეყნდება. სრული შიდა აუდიტი და implementation handoff კერძო მასალებად რჩება.
 
-## ლიცენზია
+კერძო დანერგვის შეთანხმება განსაზღვრავს workflows-ს, integrations-ს, გარემოს, acceptance evidence-სა და მხარდაჭერის პირობებს. იხილეთ [კომერციული დანერგვა](docs/COMMERCIAL.md) და [საჯარო/კერძო საზღვარი](docs/PUBLIC-PRIVATE-BOUNDARY.md).
 
-ეს არის **public documentation**, არა open-source software distribution.
+## უსაფრთხოება და ლიცენზია
 
-Copyright © 2026 myGO LLC. All rights reserved.
+სენსიტიური აღმოჩენების გასაზიარებლად გამოიყენეთ [SECURITY.md](SECURITY.md)-ში აღწერილი კერძო კომუნიკაცია.
 
----
-
-**Reason with AI. Authorize with software. Verify with evidence. Improve under governance.**
+Copyright © 2026 myGO LLC. მასალა ქვეყნდება არსებული [დოკუმენტაციის ლიცენზიით](LICENSE). ეს რეპოზიტორი არ წარმოადგენს runtime-ის open-source გავრცელებას.

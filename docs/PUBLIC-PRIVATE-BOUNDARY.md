@@ -1,6 +1,6 @@
 # Public / Private Boundary
 
-The public repository exists to prove architectural seriousness without exposing implementation assets that create security or commercial risk.
+The public repository explains the platform, interfaces, control model and delivery evidence without publishing private implementation assets.
 
 ## PUBLIC
 
@@ -16,7 +16,7 @@ May include:
 - sanitized examples;
 - public security posture;
 - commercial overview;
-- roadmap.
+- roadmap and implementation-status summaries.
 
 ## PUBLIC_INTERFACE_ONLY
 
@@ -33,6 +33,7 @@ May include interfaces and concepts without internals:
 
 Typically includes:
 
+- full internal architecture audits and implementation handoffs;
 - proprietary prompts;
 - internal orchestration logic;
 - evaluator datasets;

@@ -1,40 +1,26 @@
-# Outcome & Governed Improvement
+# Outcome and Governed Improvement
 
-## Three distinct states
+Execution, verification and real-world outcome are three independent states. A successful tool call can fail acceptance; a verified implementation can still miss its business objective.
 
-```text
-Execution Success
-!= Verification Success
-!= Real-World Outcome
-```
+## Outcome records
 
-These states must not collapse into one another.
+Capture the intended metric, observation window, baseline, observed result, evidence and uncertainty. Preserve attribution limits: a later improvement does not by itself establish that the AI-generated change caused it.
 
-## Outcome examples
-
-- Code can pass tests while later production metrics reveal a regression.
-- Strategy research can be coherent while customers reject the offer.
-- SEO implementation can be correct while ranking impact remains unproven.
-- Infrastructure deployment can pass initial checks while reliability degrades later.
-
-## Improvement pipeline
+## Controlled improvement
 
 ```mermaid
-flowchart LR
-    O[Observed Outcome] --> L[Candidate Lesson]
-    L --> LV[Lesson Verification]
-    LV --> C[Candidate Change]
-    C --> E[Isolated Evaluation]
-    E --> R[Regression Suite]
-    R --> A[Adversarial Evaluation]
-    A --> K[Cost / Latency Evaluation]
-    K --> V[Critic Gate]
-    V --> P[Policy / Human Gate]
-    P --> CR[Candidate Release]
-    CR --> S[Canary / Staging]
-    S --> SP[Stable Promotion]
+flowchart TD
+    O[Observed outcome] --> L[Candidate lesson]
+    L --> C[Candidate change]
+    C --> E[Isolated evaluation]
+    E -->|Fails or lacks evidence| R[Reject or rework]
+    E -->|Meets criteria| G[Policy and promotion gate]
+    G --> S[Staging or canary]
+    S -->|Accepted| P[Stable release]
+    S -->|Regression| B[Rollback]
+    P --> O
 ```
 
-A failed candidate must be allowed to lose.
+Evaluation includes regression, adversarial and cost/latency checks. Learner identity cannot edit the evaluation authority or directly promote stable behavior. Promotion binds the candidate, evaluated artifacts, policy and evidence revisions; changed evidence invalidates stale eligibility.
 
-Self-improvement is controlled release engineering, not autonomous self-modification.
+Failed candidates leave stable behavior unchanged. Rollback and compensation limits must reflect the actual target's capabilities. Outcome-driven improvement has its own acceptance stage in the [Roadmap](../ROADMAP.md), separate from sandbox execution acceptance.

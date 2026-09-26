@@ -1,56 +1,57 @@
-# Governance & Architectural Invariants
+# Governance and Architectural Invariants
 
-Governance exists to prevent probabilistic reasoning from becoming implicit authority.
+**Models reason. Software controls state and authority.**
 
-## Core invariant
+The following invariants define the protocol's control model and release acceptance requirements.
 
-> **Models reason. Software controls state and authority.**
+## Authority
 
-## Required invariants
+- Validate contracts and scope before execution; apply deterministic policy to every external effect.
+- Bind approvals to exact material action inputs; reject changed targets or arguments.
+- Enforce current policy, expiry, cancellation and budget at dispatch commitment.
+- Keep protected credentials and target access behind the isolated broker.
+- Prevent models from granting themselves authority or changing frozen acceptance criteria.
+- Apply the same data/egress policy to reads, exports, model fallback and telemetry.
 
-1. No execution without a valid execution contract.
-2. No external side effect without policy authorization.
-3. No production mutation without the required approval floor.
-4. No model may grant itself additional permissions.
-5. No self-improvement component may directly promote itself to stable.
-6. No material claim may silently lose provenance.
-7. No critical state should depend only on chat history.
-8. No unbounded autonomous loop.
-9. No stale approval may authorize a materially changed plan.
-10. No retry should duplicate an external side effect merely because the workflow repeated.
-11. No unresolved evidence may silently become verified evidence.
-12. No unavailable test may become PASS.
-13. Credentials should be replaced with narrower delegated capabilities where practical.
-14. Destructive actions must not rely only on natural-language intent.
-15. External content must not automatically become trusted instruction.
-16. One intelligent role must not silently rewrite another role's canonical artifacts.
-17. Important releases should be attributable to source inputs, policies, model versions and code versions.
-18. Important decisions should be replayable enough to explain why they occurred.
-19. Expensive or irreversible operations require explicit risk classification.
-20. External side effects should use idempotency or equivalent duplicate protection where technically possible.
+## Durable state
 
-## Governance flow
+- Keep authoritative state in the database with legal transitions and version checks.
+- Commit state, audit events and required jobs/outbox entries together.
+- Reject stale worker writes through fencing; retain late evidence for reconciliation.
+- Preserve unknown effects across crash, cancellation and restart.
+- Reconcile ambiguous mutations before retry; do not claim universal exactly-once execution.
+- Count reserved, settled and uncertain costs; bound retries, time and iterations.
+
+## Evidence and improvement
+
+- Retain provenance and immutable references for material claims.
+- Never convert a missing check or unsupported assertion into PASS.
+- Invalidate dependent gates when evidence, acceptance or critical contradictions change.
+- Treat verification eligibility and production permission as separate decisions.
+- Require separate evaluation and promotion for improvements; the learner cannot promote itself.
+- Record rollback and compensation limitations before approving irreversible effects.
+
+## Approval and dispatch
 
 ```mermaid
 sequenceDiagram
-    participant Brain
-    participant Control as Control Plane
-    participant Policy
+    participant Agent
+    participant Control
     participant Human
-    participant Exec as Executor
-
-    Brain->>Control: PlanContract
-    Control->>Control: Validate schema + semantics
-    Control->>Policy: Evaluate requested capabilities
-    alt Human approval required
-        Policy->>Human: Approval request
-        Human-->>Policy: Approve / Reject
+    participant Broker
+    participant Target
+    Agent->>Control: Typed action proposal
+    Control->>Control: Validate scope and policy
+    opt Human approval required
+        Control->>Human: Exact action and limits
+        Human-->>Control: Authenticated decision
     end
-    Policy-->>Control: PolicyDecision
-    Control->>Exec: Scoped AuthorizationGrant
-    Exec-->>Control: ExecutionRecord + Evidence
+    Control->>Broker: Bound grant and immutable action
+    Broker->>Control: Final check and atomic consumption
+    Control-->>Broker: Dispatch commitment
+    Broker->>Target: Allowlisted operation
+    Target-->>Broker: Receipt or ambiguous response
+    Broker->>Control: Evidence and effect state
 ```
 
-## Fail closed
-
-When critical information, authorization or verification is missing, the safe default is to stop, block, escalate or mark uncertainty explicitly rather than silently continue.
+Cancellation before dispatch commitment blocks the operation. Later cancellation may leave an in-flight effect that still needs reconciliation. Missing authority blocks dispatch; missing evidence preserves uncertainty.

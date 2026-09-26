@@ -1,53 +1,25 @@
-# Deployment Models
+# Deployment Architecture
 
-Private deployment is a first-class architectural requirement.
+**Initial target: single-tenant, private and self-hosted.** Deployment modes are defined architectural paths, with operational acceptance required for each delivered environment.
 
-## Supported target patterns
+| Mode | Scope and condition |
+|---|---|
+| Dedicated VPS or server | Bounded private workload with enforced broker/worker isolation |
+| Private cloud | Customer-controlled network, identity and storage boundaries |
+| On-premises | Customer infrastructure with approved model and package access |
+| Hybrid | Private control plane with explicitly approved external model endpoints |
+| Restricted network | Requires compatible local/approved endpoints and dependency delivery; offline capability is not presumed |
 
-### Dedicated VPS
+## Runtime boundaries
 
-Good for bounded private deployments with modest operational complexity.
+PHP UI/API, supervised PHP workers, MariaDB and private artifact storage form the application foundation. The broker uses a separate identity/process or container with narrow credentials and egress. Model workers cannot directly access protected targets. Verifier access is separately scoped.
 
-### Dedicated Server
+The architecture has no mandatory myGO-hosted SaaS control-plane dependency. Approved external model use still creates network and data-policy requirements.
 
-Useful where hardware isolation, predictable resources or local control is required.
+## Acceptance obligations
 
-### Private Cloud
+An installation must establish authentication, permissions, filesystem/network isolation, secret references, logging, process supervision, database migration, backup/restore, artifact retention, recovery and upgrade procedures.
 
-Suitable for enterprise network segmentation, internal identity and controlled data locality.
+Restored environments start in a recovery-safe mode. Old grants must be revoked or revalidated before dispatch resumes. Target reconciliation protects against replaying effects that occurred after the restored checkpoint.
 
-### On-Premises
-
-For organizations that require infrastructure ownership, local trust boundaries or restricted data movement.
-
-### Restricted / Air-Gapped
-
-Possible where practical, subject to approved model and package availability.
-
-### Single-Tenant Enterprise
-
-Dedicated control plane, policies, secrets, storage and connectors.
-
-### Hybrid
-
-Private control plane with selected external model providers or approved external services.
-
-## Deployment design questions
-
-Every deployment should explicitly define:
-
-- trust boundary;
-- data location;
-- model location;
-- secret ownership;
-- outbound network requirements;
-- upgrade strategy;
-- audit strategy;
-- backup;
-- restore;
-- disaster recovery;
-- provider failover.
-
-## No mandatory myGO-hosted SaaS dependency
-
-A private deployment should not require a myGO-hosted SaaS control plane unless the customer explicitly chooses such a model.
+Production operation follows the sandbox slice, staging connector checks, restore drills and a scoped pilot. The runtime must publish its supported profiles/connectors and limits. See [Roadmap](../ROADMAP.md).

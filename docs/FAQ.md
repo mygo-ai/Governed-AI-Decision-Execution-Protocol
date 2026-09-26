@@ -1,41 +1,45 @@
 # FAQ
 
-## Is this open source?
+## What is being built?
 
-No. This repository is public documentation and architecture material. The private runtime and proprietary implementation are not distributed as open-source software here.
+A governed AI decision and execution platform with a PHP-native control plane, isolated tool broker, durable workers and independent verification. The owner confirms that the private implementation is nearing completion and components have been validated separately. This repository publishes its architecture and delivery scope.
 
-## Is this just a set of prompts?
+## Is every capability already demonstrated?
 
-No. The target protocol defines deterministic state, typed contracts, policy enforcement, scoped authorization, durable execution, evidence provenance, independent verification, outcome feedback and governed promotion/rollback.
+The owner confirms component-level validation in the private development work. Integrated acceptance and production rollout remain separately recorded release decisions. See [Implementation status](../IMPLEMENTATION-STATUS.md).
 
-## Does the AI decide whether it is allowed to act?
+## Is PHP optional?
 
-No. The architecture separates model reasoning from software authority.
+PHP 8.4 with Symfony 7.4 and MariaDB is the selected foundation for this implementation. It manages application logic, state and authority; it does not implement the underlying AI model. The PHP core must work without Python.
 
-## Is PHP supported?
+## What remains from the earlier Python runtime?
 
-Yes as a private implementation architecture. PHP-native refers to the deterministic application/control plane, not to implementing the AI model itself in PHP.
+Reference behavior, compatibility fixtures and evaluation assets. The latest private source must be inspected before deciding what to preserve or migrate; historical version numbers do not justify a downgrade.
 
-## Can Python still be used?
+## What is the first concrete result?
 
-Yes. Python can remain a reference runtime or specialized worker where it provides a real capability advantage.
+An authenticated sandbox run that writes a real artifact, recovers interrupted work and independently verifies output. A synthetic HTTP counter additionally demonstrates lost-response reconciliation without repeating the logical effect.
 
-## Is the system tied to one model vendor?
+## Does the AI authorize itself?
 
-No. The protocol is designed around a provider-neutral Model Gateway.
+No. Models propose actions. Deterministic software evaluates permissions and approvals; the isolated broker enforces authority at dispatch.
+
+## Is Astra or a specific provider required?
+
+No. Astra is an execution-role name in earlier materials. Model and execution interfaces are provider-neutral, subject to capability and data-policy checks.
+
+## Is execution exactly once?
+
+No general exactly-once guarantee is claimed. The protocol requires logical action identity, connector-specific duplicate protection and reconciliation. Unresolved external effects remain blocked for review.
 
 ## Can it run on-premises?
 
-The architecture is designed to support on-premises and other private deployment models, subject to implementation scope and external model availability.
+On-premises is a defined deployment path. A delivered installation must pass environment-specific acceptance, including approved model access, isolation and recovery.
 
-## Does a successful execution mean the business outcome succeeded?
+## Can it improve itself?
 
-No. Execution success, verification success and real-world outcome are separate states.
+The roadmap includes outcome-driven candidate improvements. Separate evaluation and promotion gates control stable changes; a learner cannot grant itself promotion authority.
 
-## Does the system autonomously rewrite itself?
+## Is this an open-source runtime?
 
-Not directly. Improvement candidates should pass evaluation, regression, adversarial review, policy/human gates and controlled promotion.
-
-## Is every feature described here already implemented?
-
-No such claim is made by this public repository. It is an architecture/protocol specification and commercial showcase. Implementation status depends on the private deployment/version.
+No. This repository contains public documentation and sanitized examples under its existing license. Private implementation and commercial delivery terms are agreed separately.

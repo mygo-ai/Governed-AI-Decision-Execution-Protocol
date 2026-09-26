@@ -1,19 +1,21 @@
+# Illustrative blocked report; it is not a receipt from a real test.
 schema_version: "1.0"
-artifact_type: CriticReport
-artifact_id: critic_demo_001
+artifact_type: VerificationReport
+artifact_id: verification_demo_001
 run_id: run_demo_001
-status: final
-
-verdict: PASS_WITH_REVISIONS
-
+status: illustrative_only
+acceptance_ref: "acceptance_demo_001@1"
+evidence_revision: 1
+execution_status: SUCCEEDED
+verification_status: INSUFFICIENT_EVIDENCE
+outcome_status: NOT_OBSERVED
 checks:
-  - id: acceptance_demo_001
-    result: PASS
-  - id: acceptance_demo_002
-    result: INSUFFICIENT_EVIDENCE
-
-unresolved:
-  - "One non-critical condition requires later real-world observation."
-
+  - id: json_content_check
+    required: true
+    result: NOT_RUN
+    receipt_ref: null
+    reason: "No actual verifier execution is included in this public example."
+verification_eligible: false
 notes:
-  - "Unavailable checks were not converted to PASS."
+  - "An execution-success report cannot supply missing independent verification."
+  - "A later critical contradiction invalidates any dependent gate."

@@ -1,413 +1,145 @@
 # myGO Governed AI Decision & Execution Protocol
 
-> **Turning probabilistic AI reasoning into governed, durable, auditable and verifiable execution.**
+**A protocol and PHP-native platform in advanced private development for turning complex objectives into authorized actions, independently verified results and measurable outcomes.**
 
 **Models reason. Software controls state and authority.**
 
-[![Status](https://img.shields.io/badge/status-architecture%20specification-2f363d)](#project-status)
-[![Public Repository](https://img.shields.io/badge/repository-public%20documentation-2f363d)](docs/PUBLIC-PRIVATE-BOUNDARY.md)
-[![License](https://img.shields.io/badge/license-proprietary-2f363d)](LICENSE)
-[![Private Deployment](https://img.shields.io/badge/deployment-private%20%7C%20self--hosted%20%7C%20on--premises-2f363d)](docs/DEPLOYMENT.md)
-[![PHP Native](https://img.shields.io/badge/PHP-native%20private%20implementation-2f363d)](docs/PHP-NATIVE.md)
+[ქართული](README.ka.md) | [Architecture](docs/ARCHITECTURE.md) | [Implementation status](IMPLEMENTATION-STATUS.md) | [Roadmap](ROADMAP.md)
 
----
+## What we are building
 
-## What is this?
+myGO is developing a governed decision and execution platform for business research, software engineering and infrastructure operations. The project brings AI reasoning, deterministic authorization, durable workflow state and independent verification into one controlled lifecycle.
 
-The **myGO Governed AI Decision & Execution Protocol** is a production-oriented architecture for turning AI reasoning into controlled execution.
+The implementation foundation is defined: **PHP 8.4, Symfony 7.4 LTS, MariaDB/InnoDB, supervised PHP CLI workers and a separately isolated execution broker.** The private implementation is nearing completion, with component-level validation confirmed by the project owner. The integration milestone brings real tool execution, recovery after worker interruption and independently checked output into one complete sandbox workflow.
 
-It is designed around a simple separation of responsibilities:
+This repository publishes the protocol, architecture, interface examples and delivery milestones. The application is developed and validated privately. Public documentation version **1.1.0** identifies this documentation update, not a production runtime release. See [Delivery status](IMPLEMENTATION-STATUS.md).
 
-- AI models may **analyze, propose, plan and verify**.
-- Deterministic software owns **state, permissions, policy, authorization and execution gates**.
-- Execution produces **evidence**, not just prose.
-- Verification is independent from execution.
-- Real-world outcomes are tracked separately from task completion.
-- Improvement is treated as **controlled release engineering**, not uncontrolled self-modification.
+## The problem we address
 
-This repository is a **public architecture and protocol showcase**. It intentionally does **not** expose proprietary prompts, private evaluator datasets, security-sensitive policies, commercial connectors, secret deployment automation or internal improvement logic.
+An AI-generated plan does not establish permission to act. A completed tool call does not prove that the requested result is correct. A worker timeout does not reveal whether an external change happened.
 
-## Why it is not a prompt wrapper
+The protocol defines how these questions are resolved through explicit contracts, software-controlled authority, durable records and evidence. Its purpose is to make consequential AI work reviewable, bounded and recoverable.
 
-A basic prompt wrapper is typically:
+## Four intelligent roles, one software authority
 
-```text
-User -> Prompt -> LLM API -> Response
-```
+| Component | Responsibility | Authority boundary |
+|---|---|---|
+| **Prompt Brain** | Understand the objective, compare alternatives and propose a bounded plan | Proposes decisions; cannot grant permissions |
+| **Execution Agent** | Translate the approved plan into typed action requests | Requests actions; cannot bypass the broker |
+| **Critic / Verifier** | Inspect artifacts and evidence against frozen acceptance criteria | Cannot turn missing evidence into PASS |
+| **Learning & Improvement** | Derive candidate improvements from observed results | Cannot promote itself to a stable release |
+| **Deterministic Control Plane** | Own identity, state, policies, approvals, budgets and gates | Authorizes and records actions through software rules |
 
-This protocol targets a materially different system:
+“Astra” names an execution role in earlier project materials. It is not a required model provider or a source of execution authority.
 
-```text
-User Objective
-      |
-      v
-Decision Intelligence
-      |
-      v
-Typed / Versioned Contracts
-      |
-      v
-Deterministic Control Plane
-      |
-      v
-Policy + Authorization
-      |
-      v
-Authorized Execution
-      |
-      v
-Evidence + Artifacts
-      |
-      v
-Independent Verification
-      |
-      v
-Real-World Outcome
-      |
-      v
-Governed Improvement
-```
-
-The differentiating controls include:
-
-- persistent deterministic state;
-- machine-readable contracts;
-- independent authorization;
-- policy enforcement;
-- durable workflows;
-- capability-scoped execution;
-- evidence provenance;
-- versioned decisions;
-- provider-neutral execution adapters;
-- independent verification;
-- real-world outcome feedback;
-- governed self-improvement;
-- regression evaluation;
-- rollback;
-- auditable release provenance.
-
-## Core lifecycle
-
-```mermaid
-flowchart LR
-    A[Understand] --> B[Analyze]
-    B --> C[Decide]
-    C --> D[Plan]
-    D --> E[Authorize]
-    E --> F[Execute]
-    F --> G[Verify]
-    G --> H[Observe Reality]
-    H --> I[Learn]
-    I --> J[Improve]
-    J --> A
-```
-
-## Canonical architecture
+## Target architecture
 
 ```mermaid
 flowchart TD
-    U[User / System Objective] --> B[Prompt Brain<br/>Decision Intelligence]
-    B --> C[Contract Layer]
-    C --> P[Deterministic Control Plane]
-    P --> A[Policy & Authorization]
-    A --> X[Execution Runtime / Adapters]
-    X --> E[Evidence & Artifact Registry]
-    E --> V[Critic / Verifier]
-    V --> O[Outcome Layer]
-    O --> L[Learning & Improvement]
-    L --> R[Evaluation / Promotion Gate]
-    R --> B
-
-    P -. owns .-> S[State / Identity / Budget / Versions]
-    P -. enforces .-> A
+    U[Objective and constraints] --> B[Prompt Brain]
+    B --> C[Control plane]
+    H[Human approval] --> C
+    A[Execution agent] -->|Action request| C
+    C -->|Bound grant| X[Isolated broker]
+    X --> T[Scoped tool target]
+    T --> V[Independent verifier]
+    X --> E[Evidence registry]
+    V --> E
+    E --> C
+    E --> O[Outcome observation]
+    O --> L[Improvement candidate]
+    L --> G[Evaluation and promotion gate]
+    G --> B
 ```
 
-## Five architectural responsibilities
-
-| Layer | Responsibility | Must not do |
-|---|---|---|
-| **Prompt Brain** | Understand objectives, frame problems, select reasoning methods, generate alternatives and produce structured plans | Grant itself execution authority |
-| **Control Plane** | Own state, policy, authorization, budgets, approvals, transitions and auditability | Become a probabilistic reasoning agent |
-| **Execution Runtime** | Perform only authorized actions and produce verifiable evidence | Silently change objective, permissions or acceptance criteria |
-| **Critic / Verifier** | Independently test claims, artifacts, acceptance criteria and risks | Treat inability to verify as PASS |
-| **Outcome & Improvement** | Observe reality, form candidate lessons and evaluate changes before promotion | Directly overwrite stable production behavior |
-
-## Hard governance principles
-
-The protocol is designed around non-negotiable invariants:
-
-1. No execution without a valid execution contract.
-2. No external side effect without policy authorization.
-3. No production mutation without the required approval floor.
-4. No model can grant itself additional permissions.
-5. No self-improvement component can promote itself directly to stable.
-6. No material claim may silently lose provenance.
-7. No critical state should depend only on chat history.
-8. No unbounded autonomous loop.
-9. No stale approval may authorize a materially changed plan.
-10. No unavailable test may silently become PASS.
-11. No destructive action should rely only on natural-language intent.
-12. Duplicate-protection semantics should be used for external side effects where technically possible.
+Versioned contracts connect these components. MariaDB owns authoritative workflow state; model responses and conversation history do not.
 
-See [Governance & Invariants](docs/GOVERNANCE.md).
+## End-to-end integration milestone
 
-## Evidence before confidence
-
-The protocol separates:
-
-```text
-FACT
-DIRECT_OBSERVATION
-EXTERNAL_EVIDENCE
-VENDOR_CLAIM
-MODEL_INFERENCE
-ASSUMPTION
-HYPOTHESIS
-UNKNOWN
-```
+The integration milestone joins the components into one complete, testable execution cycle:
 
-A decision should be explainable in terms of:
-
-- what the system believed;
-- what evidence supported that belief;
-- what contradicted it;
-- how fresh and applicable the evidence was;
-- which model, prompt, policy and code versions participated;
-- what new evidence later changed the belief.
+1. An authenticated operator creates a run through the UI or API.
+2. Software validates the task, target, acceptance criteria and action request.
+3. Policy evaluates permissions and obtains approval when required.
+4. The broker checks the exact authorized action and executes a sandbox adapter.
+5. Durable workers preserve progress and reconcile ambiguous effects after interruption.
+6. A separate verifier reads the actual artifact and records its result.
 
-See [Evidence & Verification](docs/EVIDENCE-AND-VERIFICATION.md).
+Two concrete scenarios define acceptance:
 
-## Execution success is not business success
+| Scenario | Required result |
+|---|---|
+| **Sandbox artifact writer** | Create `output/report.json` with `status=ready` inside a registered workspace; independently verify its bytes and JSON content |
+| **Synthetic HTTP effect target** | Apply a counter increment, deliberately lose the response, then recover the receipt without repeating the logical effect |
 
-The protocol explicitly separates:
+The management panel covers authentication, runs, task/event timelines, action approval, execution and verification results, and blocked or unknown-effect review. Each operator action must use real backend authorization.
 
-```text
-Execution Success
-        !=
-Verification Success
-        !=
-Real-World Outcome
-```
-
-A deployment can pass tests and still regress later.  
-A strategy can be logically coherent and still fail in the market.  
-An SEO implementation can be correct while the real search outcome remains unknown.
-
-The **Outcome Layer** exists to preserve this distinction.
+See [First milestone and acceptance](docs/FIRST-MILESTONE.md).
 
-## Provider-neutral by design
+## Core platform capabilities
 
-Critical architecture is not intended to depend on one model vendor.
+- **Exact action authorization:** approval binds the target, operation, arguments, scope and relevant contract versions. Material changes require a new authorization decision.
+- **Enforced execution boundary:** protected credentials and network access belong to the broker; a model worker cannot bypass it.
+- **Transactional state:** state changes, audit events and required jobs/outbox records commit together.
+- **Durable recovery:** leases, heartbeats, fencing and bounded retries protect workflow progress across processes.
+- **Explicit ambiguity:** `UNKNOWN_EFFECT` triggers reconciliation; a timeout alone never authorizes replay of a mutation.
+- **Independent verification:** checks use actual artifacts and attributable verifier receipts, not an executor's assertion of success.
+- **Fresh gates:** new critical contradictions or changed acceptance inputs invalidate dependent verification gates.
+- **Controlled budgets:** reserved, settled and uncertain costs count toward the applicable limit.
+- **Governed improvement:** candidate changes pass evaluation and promotion controls before stable behavior changes.
 
-The protocol defines a **Model Gateway** concept so that Decision Intelligence, Execution Intelligence and Verification Intelligence can be configured independently by:
+These capabilities share one authority and evidence model. Component validation, integrated acceptance and production rollout are tracked in [Delivery status](IMPLEMENTATION-STATUS.md).
 
-- provider;
-- model;
-- capabilities;
-- structured-output support;
-- tool support;
-- reasoning level;
-- cost;
-- latency;
-- availability;
-- data policy;
-- region;
-- trust classification.
+## Three separate results
 
-Execution is likewise adapter-oriented rather than tied to a single named agent.
+| Result | Question |
+|---|---|
+| Execution | Did the operation run, fail or leave an uncertain effect? |
+| Verification | Does independent evidence satisfy the frozen acceptance criteria? |
+| Real-world outcome | Did the change produce the intended operational or business result? |
 
-## Private deployment
+A successful deployment can still have a poor business outcome. The protocol preserves this distinction throughout reporting and improvement.
 
-myGO offers private implementation and deployment engagements based on this protocol.
+## Implementation and deployment
 
-Supported target architectures can include:
+The selected foundation is a PHP modular monolith with a separate broker process and security identity. The PHP core is designed to operate without Python. The earlier Python reference runtime remains useful for compatibility fixtures and evaluation.
 
-- dedicated VPS;
-- dedicated server;
-- private cloud;
-- on-premises;
-- restricted-network environments where practical;
-- single-tenant enterprise;
-- hybrid model-provider access;
-- customer-controlled infrastructure.
+The initial deployment target is **single-tenant, private and self-hosted**. Dedicated servers, private cloud and on-premises installations are deployment paths subject to environment-specific acceptance. The target architecture does not require a myGO-hosted SaaS control plane.
 
-The exact implementation, integrations and security controls are agreed per deployment.
+Model and tool interfaces remain provider-neutral. External model calls, fallback providers, artifacts and telemetry must obey the same data and region policies. Specialized workers are introduced only for a demonstrated capability requirement.
 
-See [Deployment Models](docs/DEPLOYMENT.md).
+See [PHP implementation](docs/PHP-NATIVE.md) and [Deployment](docs/DEPLOYMENT.md).
 
-## PHP-native private implementation
+## Applications
 
-A major implementation path is **PHP-native**.
+The shared control architecture supports the development of domain profiles for business strategy, product decisions, software engineering, infrastructure, security, research and marketing. Each profile defines its accepted tools, evidence rules and evaluation criteria; delivery scope identifies the supported integrations.
 
-PHP-native does **not** mean implementing an AI model in PHP. It means implementing the deterministic application and control architecture naturally in a PHP environment.
-
-A private deployment may include:
-
-```text
-PHP Web UI
-PHP API
-PHP Control Plane
-PHP Policy Enforcement
-MariaDB / MySQL
-Queue / Worker System
-Model Gateway
-Tool Adapters
-Audit / Evidence Storage
-```
-
-Where a specialized worker has a real capability advantage, Python or Node.js workers can remain optional without changing the protocol contracts.
-
-See [PHP-native Architecture](docs/PHP-NATIVE.md).
-
-## Example deployment modes
-
-| Mode | Typical fit | Data/control model |
-|---|---|---|
-| **PHP Native** | PHP-centric organizations and private deployments | Core orchestration and control in PHP |
-| **PHP + Specialized Workers** | Mixed workloads | PHP control plane with optional Python/Node workers |
-| **Python Reference Runtime** | CLI, evaluation, specialized automation | Lightweight protocol-compatible runtime |
-| **Private Cloud** | Enterprise | Customer-controlled network and data plane |
-| **On-Premises** | Regulated / sensitive workloads | Customer infrastructure and trust boundary |
-| **Hybrid** | Flexible model access | Private control plane with approved external model providers |
-
-## Example use cases
-
-The protocol is intentionally domain-agnostic. Domain profiles may define their own reasoning methods, risks, accepted tools, evidence rules and critic checks while sharing the same governed core.
-
-Examples:
-
-- business strategy and capital allocation;
-- product decisions;
-- software engineering;
-- architecture reviews;
-- infrastructure and DevOps;
-- hosting and networking;
-- cybersecurity;
-- SEO and marketing;
-- sales operations;
-- research;
-- data analysis;
-- documentation and operational workflows.
-
-See [Use Cases](docs/USE-CASES.md).
-
-## Project status
-
-**Public status: Architecture Specification / Protocol Documentation**
-
-This repository documents the target architecture, public interfaces, governance model and commercial deployment model.
-
-It must not be interpreted as proof that every described mechanism is already implemented in a publicly available product.
-
-Private implementations are deployment-specific and may have a different delivery status, feature set or integration scope.
-
-## What is public and what remains private?
-
-### Public
-
-- architecture principles;
-- lifecycle;
-- role boundaries;
-- public contract concepts;
-- governance model;
-- evidence semantics;
-- deployment patterns;
-- sanitized examples;
-- public security posture;
-- high-level roadmap.
-
-### Private / controlled
-
-- proprietary prompts;
-- private evaluator datasets;
-- internal control policies;
-- security-sensitive authorization logic;
-- commercial connectors;
-- deployment secrets;
-- customer-specific integrations;
-- proprietary improvement logic;
-- production source code unless contractually provided.
-
-See [Public / Private Boundary](docs/PUBLIC-PRIVATE-BOUNDARY.md).
-
-## Repository map
-
-```text
-.
-├── README.md
-├── README.ka.md
-├── LICENSE
-├── SECURITY.md
-├── ROADMAP.md
-├── CHANGELOG.md
-├── REPOSITORY-METADATA.md
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── GOVERNANCE.md
-│   ├── CONTRACTS.md
-│   ├── EVIDENCE-AND-VERIFICATION.md
-│   ├── DURABLE-EXECUTION.md
-│   ├── SECURITY-ARCHITECTURE.md
-│   ├── MODEL-AND-TOOL-ABSTRACTION.md
-│   ├── OUTCOME-AND-IMPROVEMENT.md
-│   ├── PHP-NATIVE.md
-│   ├── DEPLOYMENT.md
-│   ├── USE-CASES.md
-│   ├── PUBLIC-PRIVATE-BOUNDARY.md
-│   ├── COMMERCIAL.md
-│   ├── FAQ.md
-│   └── GLOSSARY.md
-├── examples/
-│   ├── README.md
-│   ├── objective-contract.example.yaml
-│   ├── plan-contract.example.yaml
-│   ├── authorization-grant.example.yaml
-│   ├── evidence-record.example.yaml
-│   ├── critic-report.example.yaml
-│   └── outcome-record.example.yaml
-└── .github/
-    ├── ISSUE_TEMPLATE/
-    │   ├── commercial-deployment.yml
-    │   └── documentation-feedback.yml
-    └── pull_request_template.md
-```
-
-## Commercial deployment
-
-This public repository is not an open-source distribution of the private runtime.
-
-For organizations that need a governed AI system adapted to their environment, myGO can provide:
-
-- private architecture implementation;
-- PHP-native control plane;
-- self-hosted deployment;
-- on-premises deployment;
-- custom policy and approval workflows;
-- model-provider integration;
-- private tool adapters;
-- internal knowledge integration;
-- audit and evidence design;
-- customer-specific domain profiles;
-- migration and integration services.
-
-See [Commercial Deployment](docs/COMMERCIAL.md).
-
-## Security
-
-Security-sensitive implementation details are intentionally excluded from this repository.
-
-For responsible disclosure and security contact guidance, see [SECURITY.md](SECURITY.md).
-
-## License
-
-This repository is **public documentation, not open-source software**.
-
-Copyright © 2026 myGO LLC. All rights reserved.
-
-See [LICENSE](LICENSE).
-
----
-
-### myGO Governed AI Decision & Execution Protocol
-
-**Reason with AI. Authorize with software. Verify with evidence. Improve under governance.**
+## Documentation
+
+| Topic | Document |
+|---|---|
+| Current status and evidence | [Implementation status](IMPLEMENTATION-STATUS.md) |
+| Delivery sequence | [Roadmap](ROADMAP.md) |
+| Components and trust boundaries | [Architecture](docs/ARCHITECTURE.md) |
+| Integrated execution cycle | [First milestone](docs/FIRST-MILESTONE.md) |
+| Typed interfaces | [Contracts](docs/CONTRACTS.md) |
+| Authority and safety rules | [Governance](docs/GOVERNANCE.md), [Security architecture](docs/SECURITY-ARCHITECTURE.md) |
+| Failure and recovery | [Durable execution](docs/DURABLE-EXECUTION.md) |
+| Proof and acceptance | [Evidence and verification](docs/EVIDENCE-AND-VERIFICATION.md) |
+| PHP and operations | [PHP-native](docs/PHP-NATIVE.md), [Deployment](docs/DEPLOYMENT.md) |
+| Providers and integrations | [Model and tool abstraction](docs/MODEL-AND-TOOL-ABSTRACTION.md) |
+| Outcomes and releases | [Outcome and improvement](docs/OUTCOME-AND-IMPROVEMENT.md) |
+| Scope and engagement | [Use cases](docs/USE-CASES.md), [Commercial](docs/COMMERCIAL.md), [FAQ](docs/FAQ.md) |
+| Public interfaces | [Sanitized examples](examples/README.md), [Glossary](docs/GLOSSARY.md) |
+
+## Public and private scope
+
+Public materials explain the architecture, obligations, contract concepts and acceptance milestones. Private source code, proprietary prompts, evaluator datasets, internal policies, commercial connectors, customer data and deployment secrets remain outside this repository. The full internal audit and implementation handoff are not public deliverables.
+
+Private implementation engagements define the supported workflows, integrations, environment, acceptance evidence and support terms. See [Commercial deployment](docs/COMMERCIAL.md) and [Public/private boundary](docs/PUBLIC-PRIVATE-BOUNDARY.md).
+
+## Security and license
+
+Use the private reporting guidance in [SECURITY.md](SECURITY.md) for sensitive findings.
+
+Copyright © 2026 myGO LLC. This is public documentation under the existing [proprietary documentation license](LICENSE), not an open-source runtime distribution.

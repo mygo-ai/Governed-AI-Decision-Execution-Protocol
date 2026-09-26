@@ -1,0 +1,24 @@
+# Illustrative shape only; no operation is requested by this file.
+schema_version: "1.0"
+artifact_type: ActionRequest
+artifact_id: action_demo_001
+tenant_id: tenant_demo
+project_id: project_demo
+run_id: run_demo_001
+task_ref: "task_demo_001@1"
+acceptance_ref: "acceptance_demo_001@1"
+status: proposed
+environment: sandbox
+resource_id: resource_sandbox_demo
+tool_id: sandbox_writer
+tool_version: "1.0"
+operation: sandbox.write_artifact
+logical_action_key: demo_report_write_001
+arguments:
+  relative_path: output/report.json
+  content_ref: "artifact_demo_content@1"
+  content_digest: "sha256:<exact-content-digest>"
+  expected_previous_digest: null
+notes:
+  - "Null previous digest means the target must not exist."
+  - "Ownership, scope and risk are resolved by trusted software."

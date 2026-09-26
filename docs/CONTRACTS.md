@@ -1,71 +1,40 @@
 # Contract Architecture
 
-The protocol uses versioned machine-readable artifacts to prevent critical operational state from existing only in prose.
+Versioned machine-readable artifacts connect reasoning, authority, execution and verification. Schema validity is necessary; semantic checks establish correct ownership, scope, operation, environment and dependencies.
 
-## Candidate contract families
+## Core execution cycle
 
-The public protocol may define or evolve artifacts such as:
-
-| Artifact | Purpose |
+| Contract | Responsibility |
 |---|---|
-| `RunIntake` | Initial request and run metadata |
-| `ObjectiveContract` | Objective, constraints and success definition |
-| `ContextSnapshot` | Context captured for a specific decision/run |
-| `ConstraintContract` | Explicit limits and obligations |
-| `ClaimRecord` | Material claim and epistemic type |
-| `EvidenceRecord` | Evidence, provenance and verification metadata |
-| `AssumptionRecord` | Explicit assumption |
-| `DecisionRecord` | Decision and supporting references |
-| `PlanContract` | Approved execution plan structure |
-| `TaskContract` | Bounded executable task |
-| `ToolCapabilityContract` | Tool capability declaration |
-| `ActionRequest` | Requested side effect |
-| `PolicyDecision` | Policy evaluation result |
-| `AuthorizationGrant` | Scoped permission to act |
-| `ExecutionRecord` | What actually executed |
-| `TaskResult` | Task result and artifacts |
-| `EscalationRecord` | Decision-changing fact or blocked condition |
-| `CriticRequest` | Verification request |
-| `CriticReport` | Independent verification result |
-| `OutcomeRecord` | Real-world outcome |
-| `LessonRecord` | Candidate lesson from observed outcome |
-| `ImprovementCandidate` | Proposed system change |
-| `EvaluationRun` | Isolated evaluation evidence |
-| `PromotionDecision` | Candidate promotion/rejection |
-| `ReleaseManifest` | Release provenance |
-| `RollbackRecord` | Rollback event |
+| `RunIntake` | Objective, request identity and initial constraints |
+| `PlanContract` | Bounded tasks, dependencies and approved plan references |
+| `TaskContract` | A task's scope, resources and execution limits |
+| `AcceptanceSpec` | Frozen criteria and required check/evidence definitions |
+| `ActionRequest` | Exact proposed target, operation, typed arguments and preconditions |
+| `PolicyDecision` | Software-derived permission decision and approval obligations |
+| `AuthorizationGrant` | Narrow, expiring authority bound to the canonical action digest |
+| `ExecutionRecord` | Actual attempt, adapter, fence, effect state and receipt |
+| `TaskResult` | Output references and separate execution/result state |
+| `VerificationReport` | Independent checks, evidence revisions and acceptance verdict |
 
-This is a protocol catalog, not a promise that every artifact remains separate in every implementation.
+Broader contract families include `ObjectiveContract`, `ContextSnapshot`, `ClaimRecord`, `EvidenceRecord`, `DecisionRecord`, `ToolManifest`, `OutcomeRecord`, `LessonRecord`, `ImprovementCandidate`, `EvaluationRun`, `PromotionDecision`, `ReleaseManifest` and `RollbackRecord`.
 
-## Common fields
+Earlier materials use `CriticReport` for the broader review aggregate and `ToolCapabilityContract` for tool capability descriptions. Compatibility must be explicit; do not silently reinterpret historical fields or imply that every family needs a separate database table.
 
-Important artifacts should consider:
+## Identity and immutable references
 
-```text
-schema_version
-artifact_id
-run_id
-project_id
-tenant_id
-parent_refs
-created_at
-creator_role
-creator_version
-content_hash
-status
-provenance
-supersedes
-validation_state
-```
+Common envelope concepts include schema version, artifact ID, tenant/project/run identity, creator identity/version, creation time, parent references, content digest, provenance and supersession. Artifact references resolve to immutable bytes within the caller's permitted scope.
 
-## Evolution
+Canonicalization rejects malformed input and ambiguous representations, including duplicate JSON keys, before an authorization digest is accepted. Hashes must identify exact material inputs, not a mutable path that may later contain different data.
 
-Breaking schema changes must not silently reinterpret historical runs.
+## Action binding
 
-Implementations should support explicit:
+Approval and grants bind the target, operation, tool/version, typed arguments, environment, credential scope, side-effect classification, relevant task/plan/policy/acceptance references and budget limits. Any material change requires re-evaluation. Server-controlled tool metadata determines risk; the model cannot downgrade its own action.
 
-- schema versions;
-- compatibility rules;
-- migration rules;
-- immutable historical references;
-- supersession semantics.
+The same logical key with different action content is a conflict. The broker consumes the initial grant atomically and checks current policy, cancellation, scope and resource preconditions. Recovery attempts retain the logical operation's identity and require current authorization.
+
+## Historical compatibility
+
+Breaking changes create a new schema version and explicit migration. Preserve original bytes, digests and trust classifications. Historical operator assertions do not become independent verification, and old approvals do not become fresh dispatch authority.
+
+The [examples](../examples/README.md) are sanitized explanatory artifacts, not executable grants or a complete schema distribution.

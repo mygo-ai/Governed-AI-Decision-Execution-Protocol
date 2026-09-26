@@ -24,11 +24,13 @@ trust_classification
 
 Decision, execution and verification roles may be independently configured.
 
+Fallback routing must preserve tenant data classification and region policy. If no compliant provider is available, wait or block instead of sending data to an unauthorized endpoint.
+
 ## Execution adapters
 
 The protocol does not hard-code a named executor as the architectural core.
 
-An executor is an implementation of a bounded execution interface.
+An execution agent proposes typed actions; the isolated broker dispatches permitted adapters. “Astra” is a role name, not a mandatory provider. An adapter declares its idempotency, result-lookup, precondition and compensation semantics. Unknown effects follow connector-specific reconciliation.
 
 ## Tool capability manifests
 

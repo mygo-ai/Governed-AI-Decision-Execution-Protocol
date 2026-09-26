@@ -1,102 +1,35 @@
 # Security Architecture
 
-Every model output may be incorrect. Every external content source may be adversarial.
+Model output and external content are untrusted inputs. Deterministic validation and isolated execution enforce authority independently of the model's reasoning.
 
-## Identity
+## Identities and privileges
 
-Important actions should be attributable across:
+Separate human operator, approver, agent, broker and verifier identities. The agent proposes actions and reads permitted artifacts; it cannot approve, consume grants or promote releases. The broker dispatches scoped adapters but cannot edit users, policies or acceptance. The verifier reads permitted output and issues attributable check records.
 
-- human actor identity;
-- workload identity;
-- agent identity;
-- model/provider identity;
-- delegated authority.
+A single authenticated operator can fill the approver role for the initial sandbox scope. Stronger separation of duties is policy-driven; never simulate a second human identity.
 
-## Authorization
+## Execution perimeter
 
-A private implementation may combine:
+Protected credentials and outbound access are restricted to the broker. OS identities, filesystem permissions and network controls must prevent direct worker access. Server-controlled resource IDs resolve targets; arbitrary caller paths and unrestricted commands are not accepted substitutes.
 
-- RBAC;
-- ABAC;
-- capability-based authorization;
-- policy-as-code;
-- per-action permissions;
-- one-time action grants;
-- TTL;
-- nonce;
-- environment scope;
-- resource scope;
-- tool scope.
+Sandbox writes validate relative paths, symlinks, expected prior state and content digests. Tool adapters enforce typed operations, resource ownership, egress and data-classification rules. Calling a tool “read-only” does not authorize data export.
 
-## Tool security
+## Threats and controls
 
-The architecture must account for:
+| Threat | Control and acceptance evidence |
+|---|---|
+| Changed action after approval | Immutable action digest and dispatch-time validation |
+| Prompt injection or malicious content | Untrusted input classification and broker-enforced scope |
+| Cross-tenant/project/resource access | Server-resolved identity, ownership and scoped queries |
+| Stale worker or duplicate delivery | Leases, fences, logical keys and reconciliation |
+| Forged verification | Authorized verifier receipts and independently read artifacts |
+| Late critical contradiction | Gate revision invalidation and consumption-time recheck |
+| Secret leakage or forbidden model fallback | Brokered secrets, restricted egress and uniform data policies |
 
-- indirect prompt injection;
-- malicious files/webpages;
-- poisoned repository instructions;
-- untrusted API responses;
-- parameter injection;
-- shell injection;
-- SSRF;
-- secret leakage;
-- unsafe file access;
-- unauthorized network egress;
-- privilege escalation.
+## Operations
 
-Untrusted content must remain distinguishable from trusted system instructions.
+Use authenticated sessions, CSRF protection and server-side authorization for browser actions. Store secret references rather than values in model-visible contracts. Audit permission changes and keep sensitive telemetry scoped.
 
-## Secrets
+The initial deployment is private and single-tenant; tenant/project/resource scope remains explicit. Backup restoration requires recovery-safe startup and authorization revalidation before dispatch resumes.
 
-Preferred patterns include:
-
-- secret brokers;
-- short-lived credentials;
-- scoped credentials;
-- secret references rather than plaintext;
-- encrypted storage;
-- customer-managed secrets;
-- vault integration;
-- rotation;
-- audit.
-
-## Isolation
-
-High-risk tooling may require isolation for:
-
-- shell;
-- code execution;
-- filesystem;
-- browser;
-- network;
-- package installation;
-- external connectors.
-
-## High-risk action gates
-
-Mandatory or stricter gates should be considered for:
-
-- production writes;
-- destructive actions;
-- financial actions;
-- contractual actions;
-- credential use;
-- customer-data export;
-- security-sensitive changes;
-- infrastructure changes;
-- privilege changes.
-
-## Multi-tenancy
-
-Multi-tenant implementations should explicitly design:
-
-- tenant isolation;
-- tenant-specific policy;
-- tenant-specific encryption;
-- tenant-specific tools;
-- model policy;
-- retention;
-- deletion;
-- export.
-
-Private single-tenant deployment remains a first-class option.
+Security claims require real runtime isolation and fault tests. Public architecture disclosure must not defeat the controls; security must not depend on hiding this design. The trusted broker and privileged host administrators remain explicit trust boundaries.

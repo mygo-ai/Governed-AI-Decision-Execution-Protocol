@@ -1,48 +1,30 @@
-# Commercial Deployment
+# Private Implementation and Deployment
 
-The public repository is an architecture and protocol showcase.
+myGO’s PHP-native governed decision and execution platform is nearing completion in private development, with component-level validation confirmed by the project owner. Private engagements define the customer's workflows, infrastructure, data restrictions, integrations and acceptance requirements.
 
-myGO can deliver private implementations tailored to the customer's infrastructure, security model and workflows.
+The selected foundation is PHP 8.4, Symfony 7.4, MariaDB, supervised workers and an isolated execution broker. See [Implementation status](../IMPLEMENTATION-STATUS.md) for component validation and integrated release acceptance status.
 
-## Engagement areas
+## Engagement scope
 
-- architecture implementation;
-- PHP-native control plane;
-- private/self-hosted deployment;
-- on-premises deployment;
-- model gateway integration;
-- custom tool adapters;
-- policy and approval workflows;
-- evidence and audit architecture;
-- internal knowledge integration;
-- domain profiles;
-- workflow migration;
-- custom UI/API;
-- enterprise integration.
+- Workflow and domain-profile design.
+- Private PHP control plane, UI/API and operational deployment.
+- Model-provider integration under approved data policies.
+- Scoped tool adapters and action approval workflows.
+- Evidence, verification, audit and recovery design.
+- Customer-specific integration and migration.
+- Operational handover and agreed support.
 
-## Typical engagement flow
+## Delivery process
 
-```text
-Discovery
--> Risk / Trust Boundary Review
--> Architecture Fit
--> Deployment Design
--> Integration Scope
--> Implementation
--> Staging / Evaluation
--> Acceptance
--> Production Rollout
--> Operational Review
-```
+1. Define objectives, trust boundaries and supported workflows.
+2. Agree implementation, integration and acceptance scope.
+3. Deliver the governed sandbox cycle with observable test evidence.
+4. Validate explicitly scoped staging integrations and failure recovery.
+5. Complete operational acceptance before an authorized production rollout.
+6. Review outcomes and govern subsequent releases.
 
-## Delivery model
+## Deployment and support terms
 
-Commercial implementation is private and scoped per engagement.
+The initial target is a single-tenant private installation. Self-hosted, dedicated-server, private-cloud and on-premises deployments require environment-specific validation. Each engagement specifies supported connectors, release acceptance, delivery schedule and service commitments.
 
-The public protocol does not imply that customer-specific connectors, policies or security-sensitive implementation details are publicly available.
-
-## PHP-native option
-
-A PHP-native private architecture is available for organizations that prefer PHP/MariaDB-based deployment and operations.
-
-Optional specialized workers can be introduced only when justified by capability requirements.
+Source access, licensing, support, pricing and acceptance obligations are established in the engagement agreement. Contact myGO through its official private channels with intended workflows, environment, provider/data restrictions and required integrations.

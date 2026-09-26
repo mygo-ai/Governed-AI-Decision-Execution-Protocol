@@ -1,8 +1,8 @@
 {
   "name": "myGO Governed AI Decision & Execution Protocol",
-  "repository": "ai-decision-execution-protocol",
-  "version": "1.0.0-public-docs",
-  "status": "architecture-specification",
+  "repository": "mygo-ai/Governed-AI-Decision-Execution-Protocol",
+  "version": "1.1.0-public-docs",
+  "status": "advanced-private-development",
   "license": "proprietary-public-documentation",
   "open_source": false,
   "core_principle": "Models reason. Software controls state and authority.",
@@ -15,5 +15,24 @@
     "on-premises",
     "hybrid"
   ],
-  "public_repository_contains_source_runtime": false
+  "public_repository_contains_source_runtime": false,
+  "documentation_status": "published-architecture-and-implementation-roadmap",
+  "runtime_acceptance_status": "component-validation-owner-confirmed; integrated-verdict-not-supplied",
+  "implementation_direction": {
+    "runtime": "PHP 8.4",
+    "framework": "Symfony 7.4 LTS",
+    "database": "MariaDB / InnoDB",
+    "application": "modular-monolith",
+    "workers": "supervised-php-cli",
+    "execution_boundary": "separately-isolated-broker",
+    "initial_deployment": "single-tenant-private"
+  },
+  "first_milestone": "governed-sandbox-execution-with-recovery-and-independent-verification",
+  "implementation_progress": {
+    "stage": "nearing-completion",
+    "component_validation": "owner-confirmed",
+    "source": "project-owner-update",
+    "as_of": "2026-09-26",
+    "independently_reviewed_in_this_update": false
+  }
 }

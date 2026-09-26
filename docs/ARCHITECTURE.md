@@ -1,138 +1,55 @@
 # Architecture
 
-## Executive model
+The selected architecture is a **PHP modular monolith, transactional MariaDB control plane, separately isolated execution broker and supervised workers**. It separates probabilistic reasoning from deterministic authority. The private implementation follows these boundaries. Delivery and validation status are tracked in [Implementation status](../IMPLEMENTATION-STATUS.md).
 
-The protocol separates **reasoning** from **authority**.
+## Components and responsibilities
 
-AI output is treated as a proposal until it is validated by deterministic software and allowed by policy.
-
-```mermaid
-flowchart TD
-    U[Objective] --> D[Decision Intelligence]
-    D --> C[Contract Layer]
-    C --> CP[Deterministic Control Plane]
-    CP --> PA[Policy / Authorization]
-    PA --> EX[Execution Runtime]
-    EX --> ER[Evidence Registry]
-    ER --> CR[Critic / Verifier]
-    CR --> OU[Outcome Layer]
-    OU --> IM[Improvement Pipeline]
-    IM --> EV[Evaluation / Promotion]
-    EV --> D
-```
-
-## Architectural roles
-
-### Decision Intelligence
-
-Responsible for:
-
-- objective interpretation;
-- problem framing;
-- task classification;
-- domain-profile selection;
-- alternative generation;
-- assumptions and unknowns;
-- evidence requirements;
-- risk analysis;
-- plan generation;
-- acceptance criteria;
-- stop and escalation conditions.
-
-Output must be structured enough for deterministic validation.
-
-### Deterministic Control Plane
-
-Owns authoritative operational state:
-
-- run / project / tenant identity;
-- workflow state;
-- transitions;
-- schema and semantic validation;
-- permissions;
-- tool and environment scope;
-- approvals;
-- authorization grants;
-- budgets;
-- iteration and timeout limits;
-- retries;
-- checkpoints;
-- pause/resume/cancel;
-- artifact/evidence registries;
-- version registries;
-- audit trail;
-- promotion and rollback.
-
-### Execution Runtime
-
-Executes only authorized actions.
-
-The runtime must not silently redefine objective, budget, permissions, risk limits, acceptance criteria or production scope.
-
-### Critic / Verifier
-
-Independently checks:
-
-- factual claims;
-- provenance;
-- calculations;
-- tests;
-- artifacts;
-- acceptance criteria;
-- regressions;
-- security implications;
-- unresolved uncertainty.
-
-### Outcome Layer
-
-Captures what happened in reality after execution and verification.
-
-### Improvement Pipeline
-
-Turns observed outcomes into candidate lessons and candidate changes, then subjects them to isolated evaluation, regression, adversarial review, policy/human gates and controlled promotion.
+| Component | Owns | Must not own |
+|---|---|---|
+| Prompt Brain | Objective analysis, alternatives, bounded plan proposals | Permission issuance or canonical policy |
+| Control plane | Identity, contracts, state transitions, approvals, grants, budgets, jobs and gates | Model-authored authority shortcuts |
+| Execution agent | Task interpretation and typed action proposals | Direct protected-target access |
+| Execution broker | Preflight, grant consumption, fixed adapter dispatch and receipts | Users, acceptance criteria or policy editing |
+| Critic / Verifier | Independent artifact checks and attributable verification evidence | Executor-authored PASS or self-modified criteria |
+| Outcome and improvement | Outcome observations, candidate lessons and evaluated changes | Unilateral stable promotion |
 
 ## Trust boundaries
 
 ```mermaid
-flowchart LR
-    subgraph Untrusted["Probabilistic / Untrusted by Default"]
-        B[Brain Output]
-        M[Model Output]
-        W[External Web / Files / APIs]
-    end
-
-    subgraph Trusted["Deterministic Authority Boundary"]
-        V[Validation]
-        P[Policy Engine]
-        A[Authorization]
-        S[State Machine]
-    end
-
-    subgraph SideEffects["External Side Effects"]
-        T[Tools / APIs / Infrastructure]
-    end
-
-    B --> V
-    M --> V
-    W --> V
-    V --> P
-    P --> A
-    A --> S
-    S --> T
+flowchart TD
+    M[Models and external content] -->|Untrusted proposals| C[Control plane]
+    H[Authenticated operator] -->|Scoped approval| C
+    C --> D[MariaDB state and outbox]
+    C -->|Action digest and grant| B[Isolated broker]
+    B -->|Allowlisted operation| T[Protected target]
+    B --> R[Receipt and artifact registry]
+    T -->|Read permitted output| V[Independent verifier]
+    V --> R
+    R -->|Evidence revision| C
+    D --> W[Supervised workers]
+    W -->|Dispatch or reconcile request| B
 ```
 
-## Architecture objective
+Worker identity, filesystem permissions, network policy and credential scope must enforce this boundary. A policy mock cannot demonstrate isolation. The broker remains a trusted component whose compromise must be included in the deployment threat model.
 
-The protocol is optimized for reliable decision and execution under uncertainty, balancing:
+## Contracts and authority
 
-- decision quality;
-- execution reliability;
-- verifiability;
-- security;
-- recoverability;
-- auditability;
-- extensibility;
-- provider independence;
-- operational simplicity;
-- private deployability;
-- commercial viability.
+Versioned contracts carry tenant, project and resource scope plus immutable content references. Schema validation is followed by semantic validation of ownership, operations, environment, dependencies and acceptance coverage.
+
+Approval binds the exact material action inputs. The broker rechecks identity, action digest, approval freshness, current policy, cancellation, budget and resource preconditions at dispatch commitment. Changed inputs cannot reuse an earlier grant.
+
+## Persistence and process boundaries
+
+MariaDB owns authoritative runs, tasks, actions, attempts, approvals, grants, jobs, leases, budgets, artifact metadata, verification gates, events and outbox entries. One application transaction commits the state transition and its required records.
+
+External operations run after transaction commit. There is no global transaction with the target. Uncertain effects remain explicit until reconciliation establishes an outcome or an operator resolves a blocked case.
+
+## Evidence and improvement
+
+Execution, verification and real-world outcome are distinct. Checks read actual artifacts against frozen acceptance criteria. New critical evidence invalidates dependent gates and undispatched grants; dispatch and promotion recheck current revisions.
+
+Learning produces candidates. Separate evaluation and promotion controls govern stable changes. Outcome collection and governed learning follow the first sandbox milestone in the [Roadmap](../ROADMAP.md).
+
+## Initial scope
+
+One private, single-tenant deployment; an authenticated operations panel; a sandbox file writer; a synthetic HTTP effect target; real multi-process recovery; and independent verification. Production adapters follow acceptance of this scope.

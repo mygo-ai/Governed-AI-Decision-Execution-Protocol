@@ -1,25 +1,39 @@
+# Illustrative shape only. Placeholders are not valid credentials or digests.
 schema_version: "1.0"
 artifact_type: AuthorizationGrant
-artifact_id: auth_demo_001
+artifact_id: grant_demo_001
+tenant_id: tenant_demo
+project_id: project_demo
 run_id: run_demo_001
-status: active
+action_ref: action_demo_001
+action_digest: "sha256:<canonical-action-digest>"
+status: illustrative_only
 
 actor:
-  type: execution_adapter
-  id: executor_demo
+  type: execution_broker
+  id: broker_demo
 
 scope:
-  environment: staging
-  resources:
-    - demo-resource
-  operations:
-    - read
-    - bounded_update
+  environment: sandbox
+  resource_id: resource_sandbox_demo
+  tool_id: sandbox_writer
+  tool_version: "1.0"
+  operation: sandbox.write_artifact
+
+bindings:
+  plan_ref: "plan_demo_001@1"
+  task_ref: "task_demo_001@1"
+  acceptance_ref: "acceptance_demo_001@1"
+  policy_revision: policy_demo_001
+  approval_ref: approval_demo_001
 
 constraints:
-  production: false
-  destructive: false
-  expires_at: "2030-01-01T00:00:00Z"
+  initial_dispatch_consumptions: 1
+  cost_ceiling_minor_units: 0
+  currency: USD
+  expires_at: "2026-09-26T12:05:00Z"
 
-provenance:
-  policy_decision_ref: policy_demo_001
+notes:
+  - "The bound digest covers target, operation, typed arguments and all material scope."
+  - "Current policy, cancellation, gate revision and preconditions are rechecked."
+  - "Recovery retains the logical action identity and requires current authorization."

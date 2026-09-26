@@ -1,60 +1,27 @@
 # Repository Metadata
 
-Recommended public GitHub metadata for this repository.
+## Repository
 
-## Repository name
-
-`ai-decision-execution-protocol`
+`mygo-ai/Governed-AI-Decision-Execution-Protocol`
 
 ## Display name
 
 **myGO Governed AI Decision & Execution Protocol**
 
-## GitHub description
+## Suggested GitHub description
 
-> A protocol for governed AI decision-making and controlled execution with deterministic authority, durable workflows, evidence provenance, independent verification, and continuous improvement.
+> A governed AI decision and execution platform in advanced private development: PHP-native control plane, scoped authorization, durable workers, independent verification and controlled improvement.
 
-## Short tagline
-
-> Turning probabilistic AI reasoning into governed, durable, auditable and verifiable execution.
-
-## Core principle
+## Tagline
 
 > Models reason. Software controls state and authority.
 
 ## Suggested topics
 
-```text
-ai
-ai-agents
-agentic-ai
-decision-intelligence
-ai-governance
-ai-safety
-multi-agent-systems
-workflow-orchestration
-policy-engine
-authorization
-evidence
-verification
-auditability
-self-hosted
-on-premises
-php
-mariadb
-enterprise-ai
-```
+`ai-agents`, `decision-intelligence`, `ai-governance`, `workflow-orchestration`, `authorization`, `verification`, `auditability`, `php`, `symfony`, `mariadb`, `self-hosted`, `on-premises`
 
-## Suggested About section
+## Public positioning
 
-**Description:** use the GitHub description above.
+Private implementation nearing completion, with component-level validation confirmed by the project owner and a defined integrated acceptance roadmap. This repository publishes documentation and interface examples. Documentation version and runtime readiness are separate.
 
-**Website:** use the official myGO product or contact page when available.
-
-## Suggested social-preview headline
-
-**Governed AI Decision & Execution**
-
-Subheadline:
-
-**Reason with AI. Authorize with software. Verify with evidence.**
+These are recommended About settings; this file does not change GitHub repository settings.
