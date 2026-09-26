@@ -12,13 +12,21 @@
 
 > A governed AI decision and execution platform in advanced private development: PHP-native control plane, scoped authorization, durable workers, independent verification and controlled improvement.
 
+## Primary positioning
+
+> Turning probabilistic AI reasoning into governed, durable, auditable and verifiable execution.
+
 ## Tagline
 
 > Models reason. Software controls state and authority.
 
+## Suggested homepage
+
+`https://mygo.ge`
+
 ## Suggested topics
 
-`ai-agents`, `decision-intelligence`, `ai-governance`, `workflow-orchestration`, `authorization`, `verification`, `auditability`, `php`, `symfony`, `mariadb`, `self-hosted`, `on-premises`
+`ai-agents`, `agentic-ai`, `ai-governance`, `decision-intelligence`, `multi-agent-systems`, `workflow-orchestration`, `ai-safety`, `policy-engine`, `evidence-verification`, `durable-execution`, `enterprise-ai`, `authorization`, `verification`, `auditability`, `php`, `symfony`, `mariadb`, `self-hosted`, `on-premises`
 
 ## Public positioning
 
