@@ -1,0 +1,19 @@
+schema_version: "1.0"
+artifact_type: CriticReport
+artifact_id: critic_demo_001
+run_id: run_demo_001
+status: final
+
+verdict: PASS_WITH_REVISIONS
+
+checks:
+  - id: acceptance_demo_001
+    result: PASS
+  - id: acceptance_demo_002
+    result: INSUFFICIENT_EVIDENCE
+
+unresolved:
+  - "One non-critical condition requires later real-world observation."
+
+notes:
+  - "Unavailable checks were not converted to PASS."

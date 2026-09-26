@@ -1,0 +1,22 @@
+schema_version: "1.0"
+artifact_type: EvidenceRecord
+artifact_id: evidence_demo_001
+run_id: run_demo_001
+status: recorded
+
+epistemic_type: DIRECT_OBSERVATION
+
+claim_ref: claim_demo_001
+
+evidence:
+  summary: "Sanitized demonstration observation."
+  source_type: deterministic_test
+  freshness: current_run
+  verification_status: observed
+
+relationships:
+  - type: SUPPORTS
+    target: claim_demo_001
+
+provenance:
+  observed_by: verifier_demo

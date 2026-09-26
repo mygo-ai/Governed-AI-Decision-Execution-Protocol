@@ -1,0 +1,23 @@
+schema_version: "1.0"
+artifact_type: PlanContract
+artifact_id: plan_demo_001
+run_id: run_demo_001
+objective_ref: obj_demo_001
+status: proposed
+
+tasks:
+  - task_id: task_demo_001
+    purpose: "Collect bounded evidence."
+    side_effect_level: none
+  - task_id: task_demo_002
+    purpose: "Perform approved staging action."
+    side_effect_level: reversible
+    requires_authorization: true
+
+acceptance:
+  - "Required evidence is recorded."
+  - "No action exceeds authorized scope."
+
+stop_conditions:
+  - "Required evidence is unavailable."
+  - "Requested action exceeds current authorization."

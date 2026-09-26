@@ -1,0 +1,16 @@
+schema_version: "1.0"
+artifact_type: OutcomeRecord
+artifact_id: outcome_demo_001
+run_id: run_demo_001
+status: observing
+
+execution_success: true
+verification_success: true
+real_world_outcome: pending
+
+observations:
+  - metric: "demonstration_metric"
+    state: "awaiting_observation_window"
+
+lesson_candidate:
+  created: false

@@ -1,0 +1,21 @@
+schema_version: "1.0"
+artifact_type: ObjectiveContract
+artifact_id: obj_demo_001
+run_id: run_demo_001
+project_id: project_demo
+status: proposed
+
+objective:
+  summary: "Evaluate and safely execute a bounded operational objective."
+  success_definition:
+    - "Decision is evidence-backed."
+    - "Execution remains inside approved scope."
+    - "Independent verification is completed."
+
+constraints:
+  environment: staging
+  production_mutation: false
+  max_cost_class: medium
+
+provenance:
+  source: public_sanitized_example

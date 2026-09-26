@@ -1,0 +1,25 @@
+schema_version: "1.0"
+artifact_type: AuthorizationGrant
+artifact_id: auth_demo_001
+run_id: run_demo_001
+status: active
+
+actor:
+  type: execution_adapter
+  id: executor_demo
+
+scope:
+  environment: staging
+  resources:
+    - demo-resource
+  operations:
+    - read
+    - bounded_update
+
+constraints:
+  production: false
+  destructive: false
+  expires_at: "2030-01-01T00:00:00Z"
+
+provenance:
+  policy_decision_ref: policy_demo_001
